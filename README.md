@@ -1,24 +1,21 @@
-# README
+CRUD de Produtos: Funcionalidades completas de Criação, Leitura, Atualização e Exclusão de produtos.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Categorização: Implementação de um sistema robusto de categorias.
 
-Things you may want to cover:
+Segurança e Autorização: Implementação de controle de acesso para impedir que usuários modifiquem dados de terceiros.
 
-* Ruby version
+Autenticação JWT: Sistema de login funcional e seguro utilizando JSON Web Tokens (JWT).
 
-* System dependencies
+Paginação Performática: Paginação da lista de produtos implementada diretamente no banco de dados.
 
-* Configuration
+Filtros Manuais: Opções manuais para filtrar a lista de produtos.
 
-* Database creation
+Busca Inteligente por IA: Utilização da Google Gemini API para interpretação de linguagem natural (ex: "Eu quero chocolate") e retorno de produtos relacionados.
 
-* Database initialization
+Mecanismo de Fallback: Implementação de um mecanismo de contingência caso a busca por IA demore ou falhe.
 
-* How to run the test suite
+Sistema de Carrinho de Compras: Funcionalidade completa de adição e remoção de itens.
 
-* Services (job queues, cache servers, search engines, etc.)
+Realização de Pedido: Fluxo de checkout e finalização de compra.
 
-* Deployment instructions
-
-* ...
+Registro de Logs: Captura de logs de requisição e logs específicos da busca inteligente.
