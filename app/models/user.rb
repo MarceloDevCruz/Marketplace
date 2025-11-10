@@ -9,4 +9,6 @@ class User < ApplicationRecord
   validates :email, presence: true,
                   uniqueness: { case_sensitive: false },
                   format: { with: URI::MailTo::EMAIL_REGEXP }
+
+  accepts_nested_attributes_for :user_info
 end

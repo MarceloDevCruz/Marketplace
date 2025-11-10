@@ -40,6 +40,8 @@ class UserInfo < ApplicationRecord
 
   validates :phone, presence: true, numericality: true, length: { minimum: 10, maximum: 15 }
 
+  accepts_nested_attributes_for :address
+
   def full_name
     "#{first_name} #{last_name}"
   end
