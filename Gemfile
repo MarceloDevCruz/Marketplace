@@ -38,7 +38,7 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
-gem 'friendly_id', '~> 5.4'
+gem 'friendly_id', '~> 5.6'
 
 
 # Reduces boot times through caching; required in config/boot.rb
