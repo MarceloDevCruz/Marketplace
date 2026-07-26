@@ -1,0 +1,121 @@
+<% content_for :title, "Complete seu Perfil" %>
+
+<div class="mt-8 md:mt-12 px-4 sm:px-6 md:px-8 py-10 md:py-14 flex justify-center w-full" style="max-width: 1200px; margin: 0 auto;">
+  <div class="relative w-full max-w-4xl">
+    <div class="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-blue-900/60 via-blue-700/40 to-blue-500/30 blur-2xl opacity-70"></div>
+    <div class="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-xl shadow-blue-950/40">
+      <div class="px-4 sm:px-6 py-8 md:px-8 md:py-10">
+        <div class="mb-8">
+          <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Bem-vindo ao Marketplace!</h1>
+          <p class="mt-2 text-sm text-blue-200">Complete seu perfil para começar a explorar todas as funcionalidades.</p>
+        </div>
+
+        <%= form_with model: @user_info, url: welcome_path, method: :patch, local: false, data: { turbo: false }, id: "welcome-form" do |f| %>
+          <%= render "devise/shared/error_messages", resource: @user_info %>
+
+          <div class="space-y-8">
+            <!-- Informações Pessoais -->
+            <div>
+              <h2 class="text-lg font-semibold text-white mb-4">Informações Pessoais</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <%= f.label :first_name, "Nome", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.text_field :first_name, autofocus: true, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "Seu nome" %>
+                </div>
+
+                <div>
+                  <%= f.label :last_name, "Sobrenome", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.text_field :last_name, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "Seu sobrenome" %>
+                </div>
+
+                <div>
+                  <%= f.label :phone, "Telefone", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.text_field :phone, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "(00) 00000-0000" %>
+                </div>
+
+                <div>
+                  <%= f.label :date_of_birth, "Data de Nascimento", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.date_field :date_of_birth, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition" %>
+                </div>
+
+                <div>
+                  <%= f.label :cpf, "CPF", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.text_field :cpf, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "00000000000", maxlength: 11 %>
+                </div>
+
+                <div>
+                  <%= f.label :rg, "RG", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.text_field :rg, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "000000000" %>
+                </div>
+
+                <div>
+                  <%= f.label :rg_uf, "UF do RG", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.select :rg_uf, options_for_select(UserInfo.rg_ufs.map { |key, value| [key, value] }, @user_info&.rg_uf), { prompt: "Selecione o estado" }, { class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition" } %>
+                </div>
+
+                <div>
+                  <%= f.label :gender, "Gênero", class: "block text-sm font-medium text-blue-100" %>
+                  <%= f.select :gender, options_for_select(UserInfo.genders.map { |key, value| [t("genders.#{key}", default: key.humanize), value] }, @user_info&.gender), { prompt: "Selecione" }, { class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition" } %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Endereço -->
+            <div>
+              <h2 class="text-lg font-semibold text-white mb-4">Endereço</h2>
+              <%= f.fields_for :address, @user_info.address || @user_info.build_address do |address_form| %>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="md:col-span-2">
+                    <%= address_form.label :street, "Rua", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :street, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "Nome da rua" %>
+                  </div>
+
+                  <div>
+                    <%= address_form.label :number, "Número", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :number, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "123" %>
+                  </div>
+
+                  <div>
+                    <%= address_form.label :complement, "Complemento", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :complement, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "Apto, Bloco, etc." %>
+                  </div>
+
+                  <div>
+                    <%= address_form.label :neighborhood, "Bairro", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :neighborhood, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "Nome do bairro" %>
+                  </div>
+
+                  <div>
+                    <%= address_form.label :city, "Cidade", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :city, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "Nome da cidade" %>
+                  </div>
+
+                  <div>
+                    <%= address_form.label :state, "Estado", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :state, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "UF", maxlength: 2 %>
+                  </div>
+
+                  <div>
+                    <%= address_form.label :zip_code, "CEP", class: "block text-sm font-medium text-blue-100" %>
+                    <%= address_form.text_field :zip_code, class: "mt-1 block w-full rounded-lg bg-[#0b1f39]/50 border border-white/15 px-4 py-2.5 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/70 focus:border-blue-400 transition", placeholder: "00000-000", maxlength: 9 %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-col gap-4">
+            <%= f.submit "Atualizar Informações", class: "inline-flex justify-center rounded-lg bg-blue-600 hover:bg-blue-500 active:bg-blue-500/90 px-6 py-3 text-sm font-semibold text-white shadow shadow-blue-900/40 ring-1 ring-inset ring-white/10 focus:outline-none focus:ring-2 focus:ring-blue-400 transition", id: "submit-btn" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :head do %>
+  <script type="module">
+    import "welcome"
+  </script>
+<% end %>
+

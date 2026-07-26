@@ -29,3 +29,7 @@
 
 en:
   hello: "Hello world"
+  genders:
+    male: "Masculino"
+    female: "Feminino"
+    not_respond: "Prefiro não informar"

@@ -4,13 +4,20 @@ class WelcomeController < ApplicationController
 
   def new
     user = current_user
-    @user_info = user.build_user_info
+    @user_info = user.user_info || user.build_user_info
+    @user_info.build_address unless @user_info.address
   end
 
   def update
-    # Enqueue asynchronous update job; immediate optimistic redirect
-    UserInfos::UpdateWorker.perform_async(current_user.id, user_info_params.to_h)
-    redirect_to root_path, notice: 'Atualização de perfil em processamento.'
+    # Enqueue asynchronous update job
+    # Convert to native JSON types for Sidekiq
+    params_hash = deep_stringify_keys(user_info_params.to_h)
+    UserInfos::UpdateWorker.perform_async(current_user.id, params_hash)
+    
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: 'Atualização de perfil em processamento.' }
+      format.json { render json: { status: 'success', message: 'Atualização de perfil em processamento.' } }
+    end
   end
 
   private
@@ -47,5 +54,18 @@ class WelcomeController < ApplicationController
     return false unless info
     required = [info.first_name, info.last_name, info.phone]
     required.all?(&:present?)
+  end
+
+  def deep_stringify_keys(hash)
+    case hash
+    when Hash
+      hash.each_with_object({}) do |(key, value), result|
+        result[key.to_s] = deep_stringify_keys(value)
+      end
+    when Array
+      hash.map { |item| deep_stringify_keys(item) }
+    else
+      hash
+    end
   end
 end
